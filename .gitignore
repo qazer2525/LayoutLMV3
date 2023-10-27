@@ -1,0 +1,13 @@
+.venv
+.env
+*.build/
+*.dist/
+files/images/*.png
+files/label_studio/*.json
+files/models/
+files/ocr_tasks/*.json
+src/images/*.png
+src/models/
+src/pdfs/*.pdf
+*.xml
+*pdf

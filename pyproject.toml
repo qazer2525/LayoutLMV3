@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "layoutlmv3-fine-tuning"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+paddlepaddle = "^2.5.1"
+pytesseract = "^0.3.10"
+paddleocr = "^2.7.0.3"
+dataset = "^1.6.2"
+transformers = "^4.34.0"
+urllib3 = "1.26.16"
+python-dotenv = "^1.0.0"
+torch-utils = "^0.1.2"
+datasets = "^2.14.5"
+seqeval = "^1.2.2"
+accelerate = "^0.23.0"
+torch = { url = "https://download.pytorch.org/whl/cu121/torch-2.1.0%2Bcu121-cp39-cp39-win_amd64.whl"}
+torchaudio = { url = "https://download.pytorch.org/whl/cu121/torchaudio-2.1.0%2Bcu121-cp39-cp39-win_amd64.whl"}
+torchvision = { url = "https://download.pytorch.org/whl/cu121/torchvision-0.16.0%2Bcu121-cp39-cp39-win_amd64.whl"}
+pdf2image = "^1.16.3"
+nuitka = "^1.8.4"
+joblib = "1.2.0"
+evaluate = "^0.4.1"
+
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
