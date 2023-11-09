@@ -11,16 +11,28 @@ from pdf2image import convert_from_path
 import fitz
 from dotenv import dotenv_values
 
-id2label = {0: 'B-DOCUMENT_TYPE', 1: 'B-EFFECTIVE_DATE', 
-            2: 'B-PUBLISHED_DATE', 3: 'B-TURBOFAN_ENGINE', 
-            4: 'I-DOCUMENT_TYPE', 5: 'I-EFFECTIVE_DATE', 
-            6: 'I-PUBLISHED_DATE', 7: 'I-TURBOFAN_ENGINE', 
-            8: 'O'}
-label2color = {'B-DOCUMENT_TYPE':"red", 'B-EFFECTIVE_DATE':"blue", 
-               'B-PUBLISHED_DATE':"yellow", 'B-TURBOFAN_ENGINE':"green", 
-               'I-DOCUMENT_TYPE':"red", 'I-EFFECTIVE_DATE': "blue", 
-               'I-PUBLISHED_DATE': "yellow",'I-TURBOFAN_ENGINE':"green", 
-               'O':"gray"}
+id2label = {0: 'B-DOCUMENT_TYPE', 
+               1: 'B-EFFECTIVE_DATE', 
+               2: 'B-PUBLISHED_DATE', 
+               3: 'B-SECTION', 
+               4: 'B-TURBOFAN_ENGINE', 
+               5: 'I-DOCUMENT_TYPE', 
+               6: 'I-EFFECTIVE_DATE', 
+               7: 'I-PUBLISHED_DATE', 
+               8: 'I-SECTION', 
+               9: 'I-TURBOFAN_ENGINE', 
+               10: 'O'}
+label2color = {'B-DOCUMENT_TYPE':"red",
+            'B-EFFECTIVE_DATE':"blue", 
+            'B-PUBLISHED_DATE':"yellow", 
+            'B-SECTION':"pink", 
+            'B-TURBOFAN_ENGINE':"purple",
+            'I-DOCUMENT_TYPE': "red", 
+            'I-EFFECTIVE_DATE':"blue", 
+            'I-PUBLISHED_DATE':"yellow", 
+            'I-SECTION':"pink", 
+            'I-TURBOFAN_ENGINE':"purple",
+            'O':"grey" }
 
 document_type_to_short = {"Federal Aviation Administration": "FAA", "EASE":"EASE"}
 trent_type = {
@@ -112,14 +124,14 @@ source_repo = config["SOURCE_REPO"]
 # tesseract output levels for the level of detail for the bounding boxes
 pdf_files = glob.glob(f"{pdf_folder_path}\*.pdf")
 for x in pdf_files:
-    doc = fitz.open(x)
+    doc = fitz.open(x) # type: ignore
     count = 0
     pdf_name = x.split("\\")[-1]
     for page in doc:
         count+=1
         pix = page.get_pixmap(matrix=magnify)
         pix.save(f"{image_folder_path}\{pdf_name.replace('.pdf','', 1)}-page{count}.png")
-model = AutoModelForTokenClassification.from_pretrained(target_repo, revision = "FAA_trained_v0.0.2")
+model = AutoModelForTokenClassification.from_pretrained(target_repo) # type: ignore
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model.to(device)
 processor = AutoProcessor.from_pretrained(source_repo, apply_ocr=True)

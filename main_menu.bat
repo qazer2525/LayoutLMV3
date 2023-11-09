@@ -53,6 +53,7 @@ if "%choice%" == "1" (
 ) else if "%choice%" == "8" (
     cd /d ".\src"
     poetry run python -m nuitka .\inference.py
+    poetry run python -m nuitka .\compile_json.py
     cd /d ".."
     pause
     goto menu

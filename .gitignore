@@ -11,3 +11,4 @@ src/models/
 src/pdfs/*.pdf
 *.xml
 *pdf
+files.zip

@@ -12,6 +12,7 @@ import numpy as np
 from transformers import TrainingArguments, Trainer
 from transformers.data.data_collator import default_data_collator
 import evaluate
+from datasets import concatenate_datasets
 
 def training_model(starting_repo :str, dest_repo: str, source_repo: str):
     metric = evaluate.load("seqeval")

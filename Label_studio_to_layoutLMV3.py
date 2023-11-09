@@ -45,7 +45,7 @@ test_pdf_count = 0
 if os.path.exists(base_directory + r"\files\pdfs") and os.path.isdir(base_directory + r"\files\pdfs"):
 	file_list = os.listdir(base_directory + r"\files\pdfs")
 	file_count = len(file_list)
-	if file_count == 0:
+	if file_count < 5:
 		test_pdf_count_limit = 3
 	else:
 		test_pdf_count_limit = int(file_count * 0.2)
@@ -135,3 +135,5 @@ with open(f"{input_folder}\\training_train_layoutLMV3.json", "w") as f:
 
 with open(f"{input_folder}\\training_test_layoutLMV3.json", "w") as f:
   json.dump(test_output, f, indent=4)
+
+print(test_pdf_count)
