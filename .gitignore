@@ -7,11 +7,9 @@ files/label_studio/*.json
 files/models/
 files/ocr_tasks/*.json
 src/images/*.png
-src/models/
 src/pdfs/*.pdf
 *.xml
 *pdf
-files.zip
 files/images/eval/*
 !files/images/eval/.gitignore
 files/images/train/*
