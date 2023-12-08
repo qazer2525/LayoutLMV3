@@ -77,10 +77,11 @@ for json_file in json_files:
         except Error as e:
             print(e)
             continue
-
-    with open(f"{output_folder_path}\\{json_file}", mode='w') as f:
-        json.dump(new_json, f, indent=2)
-        
-# files = glob.glob(input_folder_path + r"\*")
-# for f in files:
-#     os.remove(f)
+    try:
+        with open(f"{output_folder_path}\\{json_file}", mode='w') as f:
+            json.dump(new_json, f, indent=2)
+    except Error as e:
+        print(e)
+files = glob.glob(input_folder_path + r"\*")
+for f in files:
+    os.remove(f)

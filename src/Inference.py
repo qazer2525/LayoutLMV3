@@ -11,28 +11,28 @@ from pdf2image import convert_from_path
 import fitz
 from dotenv import dotenv_values
 
-id2label = {0: 'B-DOCUMENT_TYPE', 
-               1: 'B-EFFECTIVE_DATE', 
-               2: 'B-PUBLISHED_DATE', 
-               3: 'B-SECTION', 
-               4: 'B-TURBOFAN_ENGINE', 
-               5: 'I-DOCUMENT_TYPE', 
-               6: 'I-EFFECTIVE_DATE', 
-               7: 'I-PUBLISHED_DATE', 
-               8: 'I-SECTION', 
-               9: 'I-TURBOFAN_ENGINE', 
-               10: 'O'}
-label2color = {'B-DOCUMENT_TYPE':"red",
-            'B-EFFECTIVE_DATE':"blue", 
-            'B-PUBLISHED_DATE':"yellow", 
-            'B-SECTION':"pink", 
-            'B-TURBOFAN_ENGINE':"purple",
-            'I-DOCUMENT_TYPE': "red", 
-            'I-EFFECTIVE_DATE':"blue", 
-            'I-PUBLISHED_DATE':"yellow", 
-            'I-SECTION':"pink", 
-            'I-TURBOFAN_ENGINE':"purple",
-            'O':"grey" }
+# id2label = {0: 'B-DOCUMENT_TYPE', 
+#                1: 'B-EFFECTIVE_DATE', 
+#                2: 'B-PUBLISHED_DATE', 
+#                3: 'B-SECTION', 
+#                4: 'B-TURBOFAN_ENGINE', 
+#                5: 'I-DOCUMENT_TYPE', 
+#                6: 'I-EFFECTIVE_DATE', 
+#                7: 'I-PUBLISHED_DATE', 
+#                8: 'I-SECTION', 
+#                9: 'I-TURBOFAN_ENGINE', 
+#                10: 'O'}
+# label2color = {'B-DOCUMENT_TYPE':"red",
+#             'B-EFFECTIVE_DATE':"blue", 
+#             'B-PUBLISHED_DATE':"yellow", 
+#             'B-SECTION':"pink", 
+#             'B-TURBOFAN_ENGINE':"purple",
+#             'I-DOCUMENT_TYPE': "red", 
+#             'I-EFFECTIVE_DATE':"blue", 
+#             'I-PUBLISHED_DATE':"yellow", 
+#             'I-SECTION':"pink", 
+#             'I-TURBOFAN_ENGINE':"purple",
+#             'O':"grey" }
 
 document_type_to_short = {"Federal Aviation Administration": "FAA", "EASE":"EASE"}
 trent_type = {
@@ -131,7 +131,7 @@ for x in pdf_files:
         count+=1
         pix = page.get_pixmap(matrix=magnify)
         pix.save(f"{image_folder_path}\{pdf_name.replace('.pdf','', 1)}-page{count}.png")
-model = AutoModelForTokenClassification.from_pretrained(target_repo) # type: ignore
+model = AutoModelForTokenClassification.from_pretrained(target_repo, local_files_only = True) # type: ignore
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model.to(device)
 processor = AutoProcessor.from_pretrained(source_repo, apply_ocr=True)
@@ -139,6 +139,7 @@ images = glob.glob(".\images\*.png")
 pdf_name = ""
 tasks = {}
 target_file = ""
+id2label = json.load(open(".\\id2labels.json"))
 for x in images:
     
     image_name = x.split("\\")[-1].strip(".png")
@@ -168,7 +169,7 @@ for x in images:
     # only keep non-subword predictions
     is_subword = np.array(offset_mapping.squeeze().tolist())[:,0] != 0
     true_tokens = [processor.tokenizer.decode(id) for idx, id in enumerate(input_ids)]
-    true_predictions = [id2label[pred] for idx, pred in enumerate(predictions)]
+    true_predictions = [id2label[str(pred)] for idx, pred in enumerate(predictions)]
     true_boxes = [unnormalize_box(box, width, height) for idx, box in enumerate(token_boxes)]
     # draw predictions over the image
     draw = ImageDraw.Draw(image)
@@ -202,8 +203,8 @@ for x in images:
                     words[label] = [text]
                 text = ""
                 label = "O"
-        draw.rectangle(box, outline=label2color[predicted_label])
-        draw.text((box[0]+10, box[1]-10), text=predicted_label, fill=label2color[predicted_label], font=font)
+        # draw.rectangle(box, outline=label2color[predicted_label])
+        # draw.text((box[0]+10, box[1]-10), text=predicted_label, fill=label2color[predicted_label], font=font)
     tasks[image_name] = words
 
     # image.show()

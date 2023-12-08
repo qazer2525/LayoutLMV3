@@ -12,3 +12,7 @@ src/pdfs/*.pdf
 *.xml
 *pdf
 files.zip
+files/images/eval/*
+!files/images/eval/.gitignore
+files/images/train/*
+!files/images/train/.gitignore

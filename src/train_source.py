@@ -1,3 +1,4 @@
+import json
 from datasets import load_dataset
 from transformers import LayoutLMv3FeatureExtractor, LayoutLMv3TokenizerFast, AutoProcessor, LayoutLMv3Processor, LayoutLMv3ForTokenClassification
 from torch.optim import AdamW
@@ -163,6 +164,8 @@ def training_model(starting_repo :str, dest_repo: str, source_repo: str):
     print("Training_dataset: ", len(train_dataset))
     print("Test_dataset: ", len(eval_dataset))
     input("Press any key to start training")
+    with open(f"./id2labels.json", mode='w') as f:
+        json.dump(id2label, f, indent=2)
     trainer.train()
     trainer.push_to_hub(dest_repo)
     trainer.evaluate()
