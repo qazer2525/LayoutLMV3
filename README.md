@@ -3,8 +3,11 @@
 
 Please find the model video explanation in the youtube - https://www.youtube.com/watch?v=bBwDTY38X58&list=PLeNIpK8NwtHtxa2wC1OcPb8RmQ9vy-Uav
 
-This is a fork of https://github.com/manikanthp/LayoutLMV3_Fine_Tuning, using Tesseract-OCR. 
-The OCR can be swapped out for other OCR, as long as you follow the input format of Label-Studio, but requires abit of programming skills
+This is a modified fork of https://github.com/manikanthp/LayoutLMV3_Fine_Tuning, using Tesseract-OCR. I was having problems with the code so I heavily modified to fit my use.
+`src/compile_json.py` is tailored to compile the model output, do create one yourself, or just use inference.py if you just want the model output
+The OCR can be swapped out for other OCR, as long as you follow the input format of Label-Studio, but requires abit of programming skills.
+inference.py is modified to handle BIO tagging scheme (refer to https://medium.com/analytics-vidhya/bio-tagged-text-to-original-text-99b05da6664)
+eg: B-PUBLISHED_DATE (beginning), I-EFFECTIVE_DATE (inside), O (others)
 
 # Prerequisites:
 
@@ -40,7 +43,8 @@ Always use the main_menu.bat to check for avaliable options, if you can program 
 3. Run main_menu.bat and enter: ```6. Launch label-studio```
 
 4. Do labelling for both train and eval(refer to https://youtu.be/_7PlXrFX7VM?list=PLeNIpK8NwtHtxa2wC1OcPb8RmQ9vy-Uav&t=400)
-(create one project for each dataset)
+(create one project for each dataset with same labels)
+(Label unwanted words as `O` for better detections)
 
 5. Export the two sections once you are done with both as json-Min and put in `files/label-studio`. rename the train json as `training.json` and eval json as `testing.json`
 
@@ -72,11 +76,6 @@ There should be 3 main flows to make it work in Microsoft flow
 2. Run model using desktop flow to generate the result (Run Inference)
 
 3. populate column using json (From onedrive to sharepoint (add column))
-
-
-Current this model and scripts is catered towards FFA, however to use for more general use,
-
-1. collect a few pdfs and follow the above until Training
 
 There are 2 parts for model usage
 
