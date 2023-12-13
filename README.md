@@ -3,6 +3,9 @@
 
 Please find the model video explanation in the youtube - https://www.youtube.com/watch?v=bBwDTY38X58&list=PLeNIpK8NwtHtxa2wC1OcPb8RmQ9vy-Uav
 
+This is a fork of https://github.com/manikanthp/LayoutLMV3_Fine_Tuning, using Tesseract-OCR. 
+The OCR can be swapped out for other OCR, as long as you follow the input format of Label-Studio, but requires abit of programming skills
+
 # Prerequisites:
 
 1. Python 3.9.* (use the installer not the embedded/portable ver)
@@ -11,13 +14,13 @@ Please find the model video explanation in the youtube - https://www.youtube.com
 
     ```C:\Users\(Employee_No)\OneDrive - Singapore Aero Engine Services Pte Ltd```
 
-(Create a folder ```LayoutLMV3``` in the onedrive folder, followed by another 3 folders inside ```LayoutLMV3```: ```json conversion```, ```test_model_input```, ```test_model_output```)
-
+(Create a folder ```LayoutLMV3``` in the onedrive folder, followed by another 3 folders inside ```LayoutLMV3```: ```json_conversion```, ```test_model_input```, ```test_model_output```)
 
 3. Microsoft Flow installed with desktop flow (Check if the machine is registered with Microsoft Automate by running ```Power Automate machine runtime```)
+
 # Steps:
 
-Always use the main_menu.bat to check for avaliable options, if you can program you can check the different scripts
+Always use the main_menu.bat to check for avaliable options, if you can program you can check the different scripts, open up main_menu.bat to figure out what scripts is running under each choice
 
 # Installations:
 
@@ -27,17 +30,20 @@ Always use the main_menu.bat to check for avaliable options, if you can program 
 
 3. fill up .env as according to .env.dist
 
+(Before proceeding, make sure that you have 1 set of pdfs for training, 1 set of pdfs for evaluation)
 # PreLabeling:
 
-1. Input pdfs into files/pdfs
+1. Input train pdfs into files/train/pdfs and eval pdfs into files/eval/pdfs
 
-2. Run main_menu.bat and enter:```2. Convert_pdf_to_dataset``` (json file is found in ```files/ocr_tasks```)
+2. Run main_menu.bat and enter:```2. Convert_pdf_to_dataset``` (the dataset json files is found in ```files/ocr_tasks```)
 
 3. Run main_menu.bat and enter: ```6. Launch label-studio```
 
-4. Do labelling (refer to https://youtu.be/_7PlXrFX7VM?list=PLeNIpK8NwtHtxa2wC1OcPb8RmQ9vy-Uav&t=400)
+4. Do labelling for both train and eval(refer to https://youtu.be/_7PlXrFX7VM?list=PLeNIpK8NwtHtxa2wC1OcPb8RmQ9vy-Uav&t=400)
+(create one project for each dataset)
 
-5. Export as json-Min and put in `files/label-studio`
+5. Export the two sections once you are done with both as json-Min and put in `files/label-studio`. rename the train json as `training.json` and eval json as `testing.json`
+
 
 # Training from base model:
 
@@ -45,20 +51,21 @@ Always use the main_menu.bat to check for avaliable options, if you can program 
 
 2. Run main_menu.bat and enter: ```4. Training from base ```
 
-(take note of the generated label before training, try to save it to somewhere)
-
 3. The model will be saved at `src/models`
+
+4. The id2label is saved as `src/id2label.json`. Open up to see what label belongs to what id
 
 # Fine-tuning:
 
-1. edit the .env in `src/` to use the model (etc, ```./models/model-8asdj34```)
+1. edit the `DEST_REPO` .env in `src/` to use the model (etc, ```./models/model-8asdj34```)
 
 2. Run main_menu.bat and enter: ```5. Fine-tuning```
 
 
 # Microsoft Flow
 
-There should be 3 main flows to make it work in Microsoft flow 
+There should be 3 main flows to make it work in Microsoft flow
+(change connection to onedrive/sharepoint/desktop flow if needed)
 
 1. Create JSON file for new files to save in onedrive location, saving in the Intranet also (Auto Creation Automation)
 
@@ -76,12 +83,3 @@ There are 2 parts for model usage
 1. model inference (what the model outputs)
 
 2. compile json (to compile model outputs to smaller version for sharepoint flow to use)
-
-
-
-
-FFA_trained_v0.0.1
-Labels:  {0: 'published date', 1: 'effective date', 2: 'turbofan engine', 3: 'document type', 4: 'others'}
-
-B and I Ner tags for FFA_trained_v0.0.1
-Labels: {0: 'B-DOCUMENT_TYPE', 1: 'B-EFFECTIVE_DATE', 2: 'B-PUBLISHED_DATE', 3: 'B-TURBOFAN_ENGINE', 4: 'I-DOCUMENT_TYPE', 5: 'I-EFFECTIVE_DATE', 6: 'I-PUBLISHED_DATE', 7: 'I-TURBOFAN_ENGINE', 8: 'O'}
